@@ -46,11 +46,7 @@ public class DictionaryService {
         dictionary.put("time", "thời gian");
     }
 
-    /**
-     * Tra cứu từ trong từ điển
-     * @param word từ cần tra cứu (không phân biệt hoa thường)
-     * @return nghĩa tiếng Việt hoặc null nếu không tìm thấy
-     */
+
     public String translate(String word) {
         if (word == null || word.trim().isEmpty()) {
             return null;
