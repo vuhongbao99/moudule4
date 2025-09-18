@@ -10,7 +10,8 @@ public class EmailSettingService implements IEmailSettingService {
 
     @Override
     public EmailSetting getSetting() {
-        return null;
+
+        return currentSetting;
     }
 
     @Override
