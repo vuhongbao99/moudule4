@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout::head('thêm mới sản phẩm')}">
+</head>
+<body>
+<header th:replace="~{layout::header('thêm mới sản phẩm')}"></header>
+<main>
+    <p><a href="/blogs">Back to customer list</a></p>
+    <div id="form">
+        <form action="/blogs/save" th:object="${blog}"
+              method="post" novalidate="novalidate">
+            <input type="hidden" th:field="*{id}">
+            <div>
+                <label for="title">Tên</label>
+                <input type="text" id="title" th:field="*{title}">
+            </div>
+            <div>
+                <label for="content">Nội dung</label>
+                <input type="text" id="content" th:field="*{content}">
+            </div>
+            <div>
+                <label for="content">Thể loại</label>
+                <select th:field="*{category}">
+                    <option value="">tất cả loại</option>
+                    <option th:each="temp : ${categories}" th:text="${temp.nameCategory}" th:value="${temp.idCategory}"></option>
+                </select>
+            </div>
+            <div>
+                <input type="submit" value="save">
+            </div>
+        </form>
+    </div>
+
+</main>
+<footer th:replace="~{layout::footer}"></footer>
+</body>
+</html>
