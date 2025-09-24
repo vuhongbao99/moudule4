@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout::head('thêm mới bài hát')}">
+</head>
+<body>
+<header th:replace="~{layout::header('thêm mới bài hát')}"></header>
+<main>
+  <p><a href="/songs">Back to customer list</a></p>
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-4 fw-semibold">Thêm mới </h5>
+        <form th:action="@{/songs/create}" method="post" th:object="${songDto}" class="needs-validation" novalidate="novalidate">
+          <div class="mb-2">
+            <label for="title" class="form-label">Tên bài hát<span style="color:red">*</span></label>
+            <input type="text" class="form-control" th:field="*{title}" id="title" placeholder="Con cò bé bé ">
+            <p class="text-err" th:errors="*{title}"></p>
+
+          </div>
+          <div class="mb-1">
+            <label for="singer" class="form-label">Nghệ sĩ thể hiện <span style="color:red">*</span></label>
+            <input type="text" th:field="*{singer}" class="form-control" id="singer" placeholder=" Nguyễn Văn A">
+            <p class="text-err" th:errors="*{singer}"></p>
+          </div>
+          <div class="mb-3">
+            <label for="genre" class="form-label">Thể loại nhạc <span style="color:red">*</span></label>
+            <input type="text" class="form-control" th:field="*{genre}" id="genre" >
+            <p class="text-err" th:errors="*{genre}"></p>
+
+          </div>
+          <button type="submit" class="btn btn-primary">Thay đổi</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+</main>
+<footer th:replace="~{layout::footer}"></footer>
+</body>
+</html>
