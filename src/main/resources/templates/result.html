@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2 th:text="${mess}" style="color: salmon"></h2>
+<p>Thông tin của bạn là:</p>
+<span>Họ:</span>
+<p th:text="${user.firstName}"></p>
+<span>Tên:</span>
+<p th:text="${user.lastName}"></p>
+<span>Tuổi:</span>
+<p th:text="${user.birthDay}"></p>
+<span>Số điện thoại:</span>
+<p th:text="${user.phone}"></p>
+<span>Email:</span>
+<p th:text="${user.email}"></p>
+</body>
+</html>
