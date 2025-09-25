@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2 th:text="${book.title}"></h2>
+<p>tên tác giả:</p>
+<p th:text="${book.author}"></p>
+<p>thể loại:</p>
+<p th:text="${book.category}"></p>
+<p>số lượng:</p>
+<p th:text="${book.quantity}"></p>
+<div th:if="${mess}">
+  <span th:text="${mess}"></span>
+</div>
+<p>mã số mượn sách của bạn là:</p>
+<div th:if="${borrowCode}">
+  <span th:text="${borrowCode.borrowCode}"></span>
+</div>
+<a th:href="@{'/books/' + ${book.bookId} + '/borrow'}" class="btn btn-outline-warning">Mượn sách</a>
+<a th:href="@{'/books'}" class="btn btn-outline-warning">quay về trang chủ</a>
+
+<!--<button type="button"-->
+<!--        class="btn btn-outline-warning"-->
+<!--        th:onclick="|window.location.href='/books/${book.bookId}/borrow'|">Mượn sách-->
+<!--</button>-->
+<!--<button type="button"-->
+<!--        class="btn btn-outline"-->
+<!--        th:onclick="|window.location.href='/books'|">  quay về trang chủ-->
+<!--</button>-->
+</body>
+</html>
