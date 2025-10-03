@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout::head('Quản lý heo')}">
+
+
+</head>
+<body>
+<header th:replace="~{layout::header('Quản lý heo')}">
+</header>
+<main>
+  <div class="d-flex align-items-center gap-3 p-3">
+    <!-- FORM THÊM + TÌM KIẾM TRÊN CÙNG 1 HÀNG, TRÁI - PHẢI -->
+    <div class="container my-4" style="max-width: 900px;">
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- Nút Thêm sách (bên trái) -->
+        <a href="/bigs/create" class="btn btn-primary btn-sm d-flex align-items-center">
+          <i class="bi bi-plus-circle me-1"></i> Thêm mới
+        </a>
+
+        <!-- Form Tìm kiếm (bên phải) -->
+        <form method="get" action="/bigs" class="d-flex align-items-center gap-2 p-3">
+          <input type="text" th:value="${keyword}" name="keyword"
+                 class="form-control form-control-sm"
+                 placeholder="Tìm theo tên" style="width: 200px;">
+          <select name="idCountry" class="form-select form-select-sm" style="width: 200px;">
+            <option value="" th:selected="${idCountry==null or idCountry==''}">Tất cả loại</option>
+            <option th:each="temp : ${countryOrigin}" th:text="${temp.origin}"
+                    th:value="${temp.idCountry}" th:selected="${temp.idCountry==idCountry}"></option>
+
+          </select>
+          <button type="submit" class="btn btn-sm btn-primary d-flex align-items-center">
+            <i class="bi bi-search me-1"></i> Tìm kiếm
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div th:if="${mess !=null}" class="alert alert-primary" role="alert" id="mess" th:text="${mess}">Thông báo</div>
+
+
+  <div th:if="${#lists.isEmpty(bigs)}">
+    <span style="color: red">không tìm thấy heo</span>
+  </div>
+  <section>
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>
+          <input type="checkbox" id="selectAll">
+        </th>
+        <th>STT</th>
+        <th>
+          Mã
+          <!--                    <a th:href="@{/blogs(sortField='title', sortDir='asc')}">▲</a>-->
+          <!--                    <a th:href="@{/blogs(sortField='title', sortDir='desc')}">▼</a>-->
+        </th>
+
+
+        <th>Ngày nhập chuồng</th>
+        <th>Trong lượng khi nhập chuồng</th>
+        <th>Ngày xuất chuồng</th>
+        <th>trọng lượng khi xuất chuồng</th>
+        <th>xuất chuồng</th>
+        <th>xuất xứ</th>
+        <th>chỉnh sửa</th>
+        <th>xóa</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="big, stat : ${bigs}">
+        <td>
+          <input class="form-check-input item-checkbox" type="checkbox" name="ids" th:value="${big.idBig}">
+        </td>
+        <td th:text="${stat.index + 1}"></td>
+        <td th:text="${big.idBig}"></td>
+        <td th:text="${#temporals.format(big.dateOfEntry, 'dd/MM/yyyy ')}"></td>
+        <td th:text="${big.entryWeight}"></td>
+        <td th:text="${#temporals.format(big.dateOfExit, 'dd/MM/yyyy ')}"></td>
+        <td th:text="${big.exitWeight}"></td>
+        <td th:text="${big.exitWeight==big.entryWeight? 'chưa bán':'đã bán'}"
+            th:classappend="${big.exitWeight==big.entryWeight} ? 'btn-secondary' : 'btn-success'"></td>
+
+        <td th:text="${big.countryOrigin.origin}"></td>
+        <td><a th:href="@{/bigs/{id}/edit(id=${big.idBig})}"
+               class="btn btn-outline-primary  me-1">
+
+          <i class="bi bi-pencil-square"></i>
+        </a>
+        </td>
+        <!--                <td>-->
+        <!--                    <button type="button"-->
+        <!--                            class="btn btn-outline-warning"-->
+
+        <!--                            th:onclick="'window.location.href=\'/blogs/' + ${blog.id} + '/edit\''">-->
+        <!--                        <i class="bi bi-pencil text-primary"></i></button>-->
+        <!--                </td>-->
+        <td>
+          <button class="btn btn-outline-danger" data-bs-toggle="modal"
+                  data-bs-target="#confirmDeleteModal"
+                  th:attr="data-id=${big.idBig},data-title=${big.idBig}">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+    <button type="button" id="deleteSelectedBtn" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmMultiDeleteModal">
+      <i class="bi bi-trash"></i> Xóa đã chọn
+    </button>
+
+  </section>
+</main>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item" th:if="${bigs.hasPrevious()}">
+      <a  class="page-link"
+          th:href="@{/bigs(page=${bigs.number - 1},keyword=${keyword},idCountry=${idCountry})}"
+          aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+      <!--            <a  class="page-link"-->
+      <!--               th:href="@{/bigs(page=${bigs.number - 1})}"-->
+      <!--               aria-label="Previous">-->
+      <!--                <span aria-hidden="true">&laquo;</span>-->
+      <!--            </a>-->
+    </li>
+    <li class="page-item" th:if="${bigs.hasNext()}">
+      <a class="page-link"
+         th:href="@{/bigs(page=${bigs.number + 1},keyword=${keyword},idCountry=${idCountry})}"
+         aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+      <!--            <a  class="page-link"-->
+      <!--               th:href="@{/bigs(page=${bigs.number + 1})}"-->
+      <!--               aria-label="Next">-->
+      <!--                <span aria-hidden="true">&raquo;</span>-->
+      <!--            </a>-->
+    </li>
+  </ul>
+</nav>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="deleteModalLabel">Xác nhận xoá</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc muốn xóa <strong id="modalTitle" class="text-danger"></strong> không?
+      </div>
+      <div class="modal-footer">
+        <form id="deleteForm" method="post">
+
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+          <button type="submit" class="btn btn-danger">Xoá</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--xóa nhiều-->
+<div class="modal fade" id="confirmMultiDeleteModal" tabindex="-1" aria-labelledby="multiDeleteLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="multiDeleteLabel">Xác nhận xoá</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc muốn xóa <span id="countSelected" class="fw-bold text-danger"></span>  đã chọn không?
+      </div>
+      <div class="modal-footer">
+        <form id="multiDeleteForm" method="post" action="/bigs/delete_select">
+          <input type="hidden" name="ids" id="multiIds">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+          <button type="submit" class="btn btn-danger">Xoá</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{layout::footer}">
+</footer>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const deleteModal = document.getElementById('confirmDeleteModal');
+  deleteModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const idBig = button.getAttribute('data-id');
+    const name = button.getAttribute('data-title');
+    // document.getElementById("nameDelete").innerHTML = name;
+    const form = deleteModal.querySelector('#deleteForm');
+    deleteModal.querySelector('#modalTitle').textContent = name;
+
+    // Cập nhật action của form
+    form.setAttribute('action', `/bigs/${idBig}/delete`);
+  });
+</script>
+<!--xóa nhiều-->
+<script>
+  // Chọn tất cả
+  var selectAllCheckbox = document.getElementById('selectAll');
+  selectAllCheckbox.addEventListener('change', function () {
+    var allCheckboxes = document.querySelectorAll('.item-checkbox');
+    for (var i = 0; i < allCheckboxes.length; i++) {
+      allCheckboxes[i].checked = selectAllCheckbox.checked;
+    }
+  });
+
+  // Khi bấm nút xóa nhiều
+  var deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+  deleteSelectedBtn.addEventListener('click', function () {
+    var allCheckboxes = document.querySelectorAll('.item-checkbox');
+    var selectedIds = [];
+
+    for (var i = 0; i < allCheckboxes.length; i++) {
+      if (allCheckboxes[i].checked) {
+        selectedIds.push(allCheckboxes[i].value);
+      }
+    }
+
+    document.getElementById('countSelected').textContent = selectedIds.length;
+    document.getElementById('multiIds').value = selectedIds.join(',');
+  });
+</script>
+<script>
+  setTimeout(function () {
+    document.getElementById("mess").style.display = "none";
+  }, 3000)
+</script>
+
+</body>
+
+
+</html>

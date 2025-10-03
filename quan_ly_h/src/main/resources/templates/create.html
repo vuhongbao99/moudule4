@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout::head('thêm mới con heo')}">
+</head>
+<body>
+<header th:replace="~{layout::header('thêm mới con heo')}"></header>
+
+<main class="container mt-5">
+  <div class="card shadow">
+
+    <div class="card-body">
+      <form th:action="@{/bigs/save}" th:object="${bigDTO}" method="post" novalidate="novalidate">
+
+        <!-- ID ẩn -->
+        <input type="hidden" th:field="*{idBig}"/>
+
+        <!-- Ngày nhập chuồng -->
+        <div class="mb-3">
+          <label for="dateOfEntry" class="form-label">Ngày nhập chuồng</label>
+          <input type="date" id="dateOfEntry" th:field="*{dateOfEntry}" class="form-control"/>
+          <div class="text-danger small" th:if="${#fields.hasErrors('dateOfEntry')}" th:errors="*{dateOfEntry}"></div>
+
+        </div>
+
+        <!-- Trọng lượng nhập chuồng -->
+        <div class="mb-3">
+          <label for="entryWeight" class="form-label">Trọng lượng nhập chuồng</label>
+          <input type="number" id="entryWeight" th:field="*{entryWeight}" class="form-control"/>
+          <div class="text-danger small" th:if="${#fields.hasErrors('entryWeight')}" th:errors="*{entryWeight}"></div>
+
+        </div>
+
+        <!-- Ngày xuất chuồng -->
+        <div class="mb-3">
+          <label for="dateOfExit" class="form-label">Ngày xuất chuồng</label>
+          <input type="date" id="dateOfExit" th:field="*{dateOfExit}" class="form-control"/>
+          <div class="text-danger small" th:if="${#fields.hasErrors('dateOfExit')}" th:errors="*{dateOfExit}"></div>
+
+        </div>
+
+        <!-- Trọng lượng xuất chuồng -->
+        <div class="mb-3">
+          <label for="exitWeight" class="form-label">Trọng lượng xuất chuồng</label>
+          <input type="number" id="exitWeight" th:field="*{exitWeight}" class="form-control"/>
+          <div class="text-danger small" th:if="${#fields.hasErrors('exitWeight')}" th:errors="*{exitWeight}"></div>
+
+        </div>
+
+        <!-- Xuất xứ -->
+        <div class="mb-3">
+          <label for="countryOrigin" class="form-label">Xuất xứ</label>
+          <select th:field="*{countryOrigin}" id="countryOrigin" class="form-select">
+            <option value="">Tất cả loại</option>
+            <option th:each="temp : ${countryOrigin}"
+                    th:value="${temp.idCountry}"
+                    th:text="${temp.origin}">
+            </option>
+          </select>
+          <div class="text-danger small" th:if="${#fields.hasErrors('countryOrigin')}" th:errors="*{countryOrigin}"></div>
+
+        </div>
+
+        <!-- Nút lưu -->
+        <div class="text-end">
+          <button type="submit" class="btn btn-success">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{layout::footer}"></footer>
+</body>
+</html>
