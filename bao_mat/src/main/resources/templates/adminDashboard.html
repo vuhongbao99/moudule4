@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Admin Dashboard</title></head>
+<body>
+<h1>Xin chào Admin <span th:text="${userName}">Admin</span></h1>
+<p>Roles: <span th:each="r : ${roles}" th:text="${r.authority} + ' '"></span></p>
+<p>Đây là trang quản trị với quyền cao hơn.</p>
+<a th:href="@{/logout}">Đăng xuất</a>
+</body>
+</html>
